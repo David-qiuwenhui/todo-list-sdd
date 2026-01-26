@@ -1,50 +1,28 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# To-Do List 项目开发宪法
 
-## Core Principles
+## 一、 技术栈约束
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+- **核心**: Vue 3 (Composition API) + TypeScript.
+- **构建/包管理**: Yarn + Vite.
+- **状态管理**: 禁止使用 Pinia/Vuex，必须使用 `composables` 进行逻辑封装。
+- **测试**: Vitest (单元测试为主).
+- **环境**: Node v20.19.5, Mac 开发环境.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+## 二、 架构原则
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+- **逻辑抽离**: 组件（`.vue`）仅负责渲染和 UI 事件派发。业务逻辑、状态变更、副作用必须写在 `src/composables/`。
+- **持久化**: 使用 `localStorage`，键名需带版本号（如 `todo_v1`）。
+- **单向数据流**: 组件通过调用 composable 暴露的函数来修改状态，不得直接修改 props。
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+## 三、 TypeScript 规范
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+- **禁止 any**: 必须明确定义所有类型。
+- **类型定义**: 统一存放在 `src/types/`。
+- **函数签名**: 所有函数必须标注返回类型。
+- **对象约束**: `Todo` 接口必须包含 `id`, `title`, `completed`, `createdAt`。
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## 四、 测试准则
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
-
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
-
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
-
-## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
-
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
-
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+- **逻辑先行**: 修改 `composables` 逻辑后必须同步更新/编写对应的 `.spec.ts`。
+- **隔离性**: 测试不依赖真实 DOM，模拟（Mock）`localStorage`。
+- **覆盖点**: 必须覆盖 CRUD、筛选逻辑、持久化读写。
